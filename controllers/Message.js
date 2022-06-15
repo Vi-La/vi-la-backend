@@ -1,14 +1,14 @@
 const express = require('express')
 const nodemailer = require('nodemailer')
 
-const Contact = require("../models/Contact");
+const Message = require("../models/Message");
 const { success, fail, sendError } = require('../function/respond')
 
 
 // ===========Start:: create a new Message===============
 const createMessage = async (req, res) => {
     const { fullName, phone, address, email, message } = req.body;
-    const newMessage = new Contact({
+    const newMessage = new Message({
         fullName,
         phone,
         address,
@@ -27,7 +27,7 @@ const createMessage = async (req, res) => {
 // ===========Start: Get Messages===============
 const getMessages = async (req, res) => {
     try {
-        const messages = await Contact.find();
+        const messages = await Message.find();
         return success(res, 200, messages, "retrieved all Messages")
     } catch (error) {
         return sendError(res,500,null,error.message)
@@ -39,7 +39,7 @@ const getMessages = async (req, res) => {
 const getMessage = async (req, res) => {
     const msgId = req.params.postId;
     try {
-        const message = await Contact.findById(msgId)
+        const message = await Message.findById(msgId)
         if (!msgId) return fail(res, 400, null, "Wrong Id");
         return success(res, 200, message, "retrieved post")
     } catch (error) {
@@ -52,7 +52,7 @@ const getMessage = async (req, res) => {
 const deletedMessage = async (req, res) => {
     const msgId = req.params.postId;
     try {
-        const message = await Contact.findByIdAndDelete(msgId)
+        const message = await Message.findByIdAndDelete(msgId)
         if (!message) return fail(res, 400, null, "Message doesn't exist")
         return success(res, 200, null, "Message deleted successful")
     } catch (error) {
