@@ -11,7 +11,7 @@ router.get("/", getTestimonials);
 //====End:: Get Testimonials============//
 
 //====Start:: Get Testimonial============//
-router.get("/:postId",verifyToken, getTestimonial);
+router.get("/:postId",verifyToken, verifyTokenAndAdmin, getTestimonial);
 //====End:: Get Testimonial============//
 
 //====Start:: Delete Testimonial============//
