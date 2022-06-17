@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require('validator')
 
-const ContactSchema = new mongoose.Schema({
+const MessageSchema = new mongoose.Schema({
     fullName: {
         type: String,
         required: true
@@ -30,4 +30,4 @@ const ContactSchema = new mongoose.Schema({
 },
     { timestamps: true });
 
-module.exports = mongoose.model("Contact", ContactSchema)
+module.exports = mongoose.model("Message", MessageSchema)

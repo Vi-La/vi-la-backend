@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { createMessage, getMessages, getMessage, deletedMessage } = require('../controllers/Contact')
+const { createMessage, getMessages, getMessage, deletedMessage } = require('../controllers/Message')
 const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 
 //====Start:: Create Message=============//

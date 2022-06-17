@@ -11,7 +11,7 @@ router.get("/", getSainters);
 //====End:: Get Sainters============//
 
 //====Start:: Get Sainter============//
-router.get("/:postId", verifyToken, getSainter);
+router.get("/:postId", verifyTokenAndAdmin, getSainter);
 //====End:: Get Sainter============//
 
 //====Start:: Delete Sainter============//

@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const cors = require("cors");
 
 const authRoute = require('./routes/User')
 const newsRoute = require('./routes/News')
 const TestimonialRoute = require('./routes/Testimonials')
 const SaintRoute = require('./routes/Sainter')
-const MessageRoute = require('./routes/Contact')
+const MessageRoute = require('./routes/Message')
+const ContactUsRoute = require('./routes/GetInTouch')
+const CommunityRoute = require('./routes/Community')
 
 dotenv.config()
 
@@ -18,6 +21,8 @@ mongoose
 .catch((err)=> console.log(err))
 
 const port = process.env.PORT || 3000
+
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json())
 
@@ -34,14 +39,22 @@ app.use('/api/v1/news', newsRoute)
 app.use('/api/v1/message', MessageRoute)
 // =====End:: message ====
 
-// =====Start:: news ====
+// =====Start:: Testimonials ====
 app.use('/api/v1/testimonial', TestimonialRoute)
-// =====End:: News ====
+// =====End:: Testimonials ====
 
-// =====Start:: news ====
+// =====Start:: Saint ====
 app.use('/api/v1/saint', SaintRoute)
-// =====End:: News ====
+// =====End:: Saint ====
+
+// =====Start:: Community ====
+app.use('/api/v1/community', CommunityRoute)
+// =====End:: Community ====
+
+//=====Start:: Community member ======
+app.use('/api/v1/getInTouch', ContactUsRoute)
+//=====End:: Community member ======
 
 app.listen(port, ()=>{
-    console.log(`App is runnng on ${port}`)
+    console.log(`App is runnng on http://locolhost:${port}`)
 })

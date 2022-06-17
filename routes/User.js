@@ -5,7 +5,7 @@ const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken'
 
 
 //====Start:: Create User============//
-router.post("/create", createUser);
+router.post("/create", verifyTokenAndAdmin, createUser);
 //====End:: Create User============//
 
 //====Start:: Get Users============//
@@ -13,7 +13,7 @@ router.get("/", getUsers);
 //====End:: Get Users============//
 
 //====Start:: Get User============//
-router.get("/:userId", verifyToken, getUser);
+router.get("/:userId", verifyTokenAndAdmin, getUser);
 //====End:: Get User============//
 
 //====Start:: Delete User============//
