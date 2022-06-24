@@ -12,6 +12,8 @@ const SaintRoute = require('./routes/Sainter')
 const MessageRoute = require('./routes/Message')
 const ContactUsRoute = require('./routes/GetInTouch')
 const CommunityRoute = require('./routes/Community')
+const ReportRoute = require('./routes/Report')
+const HistoryRoute = require('./routes/History')
 
 dotenv.config()
 
@@ -54,6 +56,12 @@ app.use('/api/v1/community', CommunityRoute)
 //=====Start:: Community member ======
 app.use('/api/v1/getInTouch', ContactUsRoute)
 //=====End:: Community member ======
+//=====Start:: Report ======
+app.use('/api/v1/report', ReportRoute)
+//=====End:: Report ======
+//=====Start:: History ======
+app.use('/api/v1/history', HistoryRoute)
+//=====End:: History ======
 
 app.listen(port, ()=>{
     console.log(`App is runnng on http://locolhost:${port}`)

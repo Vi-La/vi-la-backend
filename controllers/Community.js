@@ -5,13 +5,13 @@ const { success, fail, sendError } = require('../function/respond')
 // ===========Start:: create a new CommunityMember===============
 const createCommunity = async (req, res) => {
     const avata = 'https://cdn.pixabay.com/photo/2017/02/20/10/57/worship-2082141__480.jpg';
-    const { member, title, action, twLink } = req.body;
+    const { member, title, action, twLink, image } = req.body;
     const newContactUs = new CommunityMember({
         member,
         title,
         action,
         twLink,
-        image: avata
+        image
     });
     try {
         const communitySaved = await newContactUs.save();

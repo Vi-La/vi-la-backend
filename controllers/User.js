@@ -8,7 +8,6 @@ const { success, fail, sendError } = require('../function/respond')
 // ===========START: CREATE USER===============
 const createUser = async (req, res) => {
     try {
-
         const password = req.body.password
         const newUser = new User({
             firstName: req.body.firstName,

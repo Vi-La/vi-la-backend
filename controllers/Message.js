@@ -4,7 +4,6 @@ const nodemailer = require('nodemailer')
 const Message = require("../models/Message");
 const { success, fail, sendError } = require('../function/respond')
 
-
 // ===========Start:: create a new Message===============
 const createMessage = async (req, res) => {
     const { fullName, phone, address, email, message } = req.body;
