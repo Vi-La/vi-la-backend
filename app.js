@@ -4,6 +4,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const cors = require("cors");
+const swaggerJsDoc = require('swagger-jsdoc');
+const options = require('./config/option');
 
 const authRoute = require('./routes/User')
 const newsRoute = require('./routes/News')
@@ -12,6 +14,7 @@ const SaintRoute = require('./routes/Sainter')
 const MessageRoute = require('./routes/Message')
 const ContactUsRoute = require('./routes/GetInTouch')
 const CommunityRoute = require('./routes/Community')
+const NormalUserRoute = require('./routes/NormalUser')
 const ReportRoute = require('./routes/Report')
 const HistoryRoute = require('./routes/History')
 
@@ -27,6 +30,7 @@ const port = process.env.PORT || 3000
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json())
+const specs = swaggerJsDoc(options);
 
 
 // =====Start:: Auth ====
@@ -52,6 +56,10 @@ app.use('/api/v1/saint', SaintRoute)
 // =====Start:: Community ====
 app.use('/api/v1/community', CommunityRoute)
 // =====End:: Community ====
+
+// =====Start:: NormalUser ====
+app.use('/api/v1/normalUser', NormalUserRoute)
+// =====End:: NormalUser ====
 
 //=====Start:: Community member ======
 app.use('/api/v1/getInTouch', ContactUsRoute)

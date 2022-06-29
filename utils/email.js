@@ -1,5 +1,7 @@
 // @ts-nocheck
 const nodemailer = require("nodemailer")
+const bcrypt = require('bcryptjs');
+
 
 const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
@@ -18,6 +20,10 @@ const sendEmail = async (options) => {
   }
   await transporter.sendMail(emailOptions)
 }
+const hashPassword = (password) => bcrypt.hashSync(password, 10);
+const comparePassword = (password, hash) => bcrypt.compareSync(password, hash);
 
-module.exports = sendEmail
+
+module.exports = {sendEmail, hashPassword, comparePassword }
+
 

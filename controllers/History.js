@@ -25,7 +25,7 @@ const createHistory = async (req, res) => {
 // ===========Start: Get CommunityMember===============
 const getHistories = async (req, res) => {
     try {
-        const history = await History.find();
+        const history = await History.find().sort({ createdAt: -1 });
         return success(res, 200, history, "retrieved Histories")
     } catch (error) {
         return sendError(res,500,null,error.message)

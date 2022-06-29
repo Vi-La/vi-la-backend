@@ -5,14 +5,14 @@ const { success, fail, sendError } = require('../function/respond')
 // ===========Start:: create a new GetInTouch===============
 const createContactUs = async (req, res) => {
     const avata = 'https://cdn.pixabay.com/photo/2016/03/21/00/54/prayer-1269776__480.png';
-    const { fullName, title, diocese, fbLink, twLink } = req.body;
+    const { fullName, title, diocese, fbLink, twLink,image } = req.body;
     const newContactUs = new ContactUs({
         fullName,
         title,
         diocese,
         fbLink,
         twLink,
-        image: avata
+        image
     });
     try {
         const personalSaved = await newContactUs.save();
@@ -26,7 +26,7 @@ const createContactUs = async (req, res) => {
 // ===========Start: Get GetInTouches===============
 const getMembers = async (req, res) => {
     try {
-        const members = await ContactUs.find();
+        const members = await ContactUs.find().sort({ createdAt: -1 });
         return success(res, 200, members, "retrieved all Community members")
     } catch (error) {
         return sendError(res,500,null,error.message)

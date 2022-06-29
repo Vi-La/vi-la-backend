@@ -1,39 +1,48 @@
 const express = require('express')
 const User = require("../models/User");
 const CryptoJS = require("crypto-js");
-const sendEmail = require("../utils/email");
+const bcrypt = require("bcrypt");
+const generator = require('generate-password')
+const { sendEmail, hashPassword, comparePassword } = require("../utils/email");
 const jwt = require("jsonwebtoken");
-const { success, fail, sendError } = require('../function/respond')
+const { success, fail, sendError, generateToken } = require('../function/respond')
 
 // ===========START: CREATE USER===============
 const createUser = async (req, res) => {
     try {
-        const password = req.body.password
+        const passwordNew = generator.generate({
+            length: 11,
+            numbers: true
+        });
+        const hashedPassword = hashPassword(passwordNew)
+
         const newUser = new User({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
             telephone: req.body.telephone,
-            password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString()
+            password: hashedPassword
         });
-    const URL = `https://www.rcc_rwanda.com/`;
-    const message = `
+        // EMAIL_PASSWORD= udtjhtwylpjdlrma
+        const URL = `https://www.rcc_rwanda.com/`;
+        const message = `
     Dear ${newUser.firstName},
     Congratulations, you are most welcome to RCC Rwanda. 
-    please login to our Web site:${URL}, 
+    please login to our Web site: ${URL}, 
     your username and password are as follow: 
-    username:${newUser.email}, 
-    Password:${password}.
+    Username: ${newUser.email}, 
+    Password: ${passwordNew}.
     `;
-    await sendEmail({
-      email: newUser.email,
-      subject: "Congratulations, welcome to RCC.",
-      message,
-    });
-    const userSaved = await newUser.save();
-    return success(res, 201, newUser, "Email Sent successfully 👍🏾")
+        await sendEmail({
+            email: newUser.email,
+            subject: "Congratulations, welcome to RCC.",
+            message,
+        });
+        const userSaved = await newUser.save();
+        return success(res, 201, newUser, "Email Sent successfully 👍🏾")
     } catch (error) {
-        return sendError(res,500,null,error.message)
+        // return sendError(res,500,null,error.message)
+        console.log(error.message)
     }
 }
 // ===========END: CREATE USER===============
@@ -41,10 +50,10 @@ const createUser = async (req, res) => {
 // ===========START: GET USERS===============
 const getUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find().sort({ createdAt: -1 });
         return success(res, 200, users, "retrieved all users")
     } catch (error) {
-        return sendError(res,500,null,error.message)
+        return sendError(res, 500, null, error.message)
     }
 }
 // ===========END: GET USERS===============
@@ -57,7 +66,7 @@ const getUser = async (req, res) => {
         return success(res, 200, user, "retrieved user")
 
     } catch (error) {
-        return sendError(res,500,null,error.message)
+        return sendError(res, 500, null, error.message)
     }
 }
 // ===========END: GET USER===============
@@ -69,7 +78,7 @@ const deletedUser = async (req, res) => {
         if (!user) return fail(res, 400, null, "user doesn't exist")
         return success(res, 200, null, "user deleted successful")
     } catch (error) {
-        return sendError(res,500,null,error.message)
+        return sendError(res, 500, null, error.message)
     }
 }
 // ===========END: DELETE USER===============
@@ -78,6 +87,9 @@ const deletedUser = async (req, res) => {
 const updatedUser = async (req, res) => {
     try {
         var userId = req.params.userId;
+        if (req.body.password) {
+            req.body.password = await bcrypt.hashSync(req.body.password, 10)
+        }
         let bodyData = req.body;
         let data = await User.findOneAndUpdate(
             { _id: userId },
@@ -95,7 +107,7 @@ const updatedUser = async (req, res) => {
         }
     }
     catch (error) {
-        return sendError(res,500,null,error.message)
+        return sendError(res, 500, null, error.message)
     }
 }
 
@@ -104,34 +116,32 @@ const updatedUser = async (req, res) => {
 // =======Start:: Login ========
 const userLogin = async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
-        !user && res.status(401).json("wrong credentials!")
+        const { email, password } = req.body
 
-        const hashedPassword = CryptoJS.AES.decrypt(
-            user.password,
-            process.env.PASS_SEC
-        );
-        const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
-        originalPassword !== req.body.password && res.status(401).json({
-            status: 'fail',
-            message: 'wrong credentials!'
-        });
+        const user = await User.findOne({ email }).select("+password")
 
-        const accessToken = jwt.sign(
-            {
-                id: user._id,
-                isAdmin: user.isAdmin,
-                email: user.email
-            },
-            process.env.JWT_SEC, { expiresIn: "1h" }
-        );
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({
+                status: "fail",
+                message: "Invalid email or password"
+            })
+        }
 
-        const { password, ...others } = user._doc;
+        const accessToken = generateToken(user._id)
 
-        res.status(200).json({ status: 'success', ...others, accessToken, message: 'loged in successful' });
+        const data = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            telephone: user.telephone,
+        }
+        res.status(200).json({ status: 'success', data, accessToken, message: 'loged in successful' });
+
     } catch (error) {
-        return sendError(res,500,null,error.message)
+        // console.error(error)
+        return sendError(res, 500, null, error.message)
     }
+
 }
 // =======End:: Login ========
 

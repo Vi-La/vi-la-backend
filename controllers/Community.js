@@ -25,7 +25,7 @@ const createCommunity = async (req, res) => {
 // ===========Start: Get CommunityMember===============
 const getCommunities = async (req, res) => {
     try {
-        const community = await CommunityMember.find();
+        const community = await CommunityMember.find().sort({ createdAt: -1 });
         return success(res, 200, community, "retrieved Communities")
     } catch (error) {
         return sendError(res,500,null,error.message)

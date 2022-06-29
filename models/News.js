@@ -7,10 +7,6 @@ const NewsSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
-    subTitle: {
-        type: String,
-        required: true
-    },
     desc: {
         type: String,
         required: true,

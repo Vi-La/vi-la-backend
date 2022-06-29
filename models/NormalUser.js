@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const validator = require('validator')
 
-const UserSchema = new mongoose.Schema({
-    firstName: {
+const NormalUserSchema = new mongoose.Schema({
+    fname: {
         type: String,
         required: true
     },
-    lastName: {
+    lname: {
         type: String,
         required: true
     },
@@ -19,8 +19,16 @@ const UserSchema = new mongoose.Schema({
             throw new Error('Invalid Email')
         }
     },
-    telephone: {
+    phone: {
         type: Number,
+        required: true
+    },
+    country: {
+        type: String,
+        required: true
+    },
+    diocese: {
+        type: String,
         required: true
     },
     password: {
@@ -28,15 +36,8 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 4,
         select:false
-    },
-    confirmPass: {
-        type: String
-    },
-    isAdmin: {
-        type: Boolean,
-        default: true
     }
 },
     { timestamps: true });
 
-module.exports = mongoose.model("User", UserSchema)
+module.exports = mongoose.model("NormalUser", NormalUserSchema)

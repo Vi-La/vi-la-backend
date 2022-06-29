@@ -5,11 +5,11 @@ const { success, fail, sendError } = require('../function/respond')
 // ===========Start:: create a new Sainters===============
 const createSainter = async (req, res) => {
     const avata = 'https://cdn.pixabay.com/photo/2015/03/13/08/45/crosses-671379__340.jpg';
-    const { sainterName, desc } = req.body;
+    const { sainterName, desc, image } = req.body;
     const saintOfDay = new Sainter({
         sainterName,
         desc,
-        image: avata
+        image
     });
     try {
         const saintSaved = await saintOfDay.save();
@@ -23,7 +23,7 @@ const createSainter = async (req, res) => {
 // ===========Start: Get Sainters===============
 const getSainters = async (req, res) => {
     try {
-        const AllSaint = await Sainter.find();
+        const AllSaint = await Sainter.find().sort({ createdAt: -1 });
         return success(res, 200, AllSaint, "retrieved all Saints")
     } catch (error) {
         return sendError(res,500,null,error.message)

@@ -26,7 +26,7 @@ const createMessage = async (req, res) => {
 // ===========Start: Get Messages===============
 const getMessages = async (req, res) => {
     try {
-        const messages = await Message.find();
+        const messages = await Message.find().sort({ createdAt: -1 });
         return success(res, 200, messages, "retrieved all Messages")
     } catch (error) {
         return sendError(res,500,null,error.message)

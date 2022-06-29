@@ -5,11 +5,11 @@ const { success, fail, sendError } = require('../function/respond')
 // ===========Start:: create a new testimonials===============
 const createTestimonial = async (req, res) => {
     const avata = 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__480.png';
-    const { name, message } = req.body;
+    const { name, message, image } = req.body;
     const newTestimonial = new Testimonial({
         name,
         message,
-        image: avata
+        image
     });
     try {
         const testimonialSaved = await newTestimonial.save();
@@ -23,7 +23,7 @@ const createTestimonial = async (req, res) => {
 // ===========Start: Get testimonials===============
 const getTestimonials = async (req, res) => {
     try {
-        const testimonials = await Testimonial.find();
+        const testimonials = await Testimonial.find().sort({ createdAt: -1 });
         return success(res, 200, testimonials, "retrieved all testimonials")
     } catch (error) {
         return sendError(res,500,null,error.message)

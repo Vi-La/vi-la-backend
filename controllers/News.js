@@ -5,12 +5,11 @@ const { success, fail, sendError } = require('../function/respond')
 // ===========Start:: create a new post===============
 const createPost = async (req, res) => {
     const avata = 'https://cdn.pixabay.com/photo/2012/04/25/00/03/dove-41260__480.png';
-    const { title, subTitle, desc } = req.body;
+    const { title, desc, newsImage } = req.body;
     const newPost = new News({
         title,
-        subTitle,
         desc,
-        newsImage: avata
+        newsImage
     });
     try {
         const newsSaved = await newPost.save();
@@ -24,7 +23,7 @@ const createPost = async (req, res) => {
 // ===========Start: Get Posts===============
 const getPosts = async (req, res) => {
     try {
-        const posts = await News.find();
+        const posts = await News.find().sort({ createdAt: -1 });
         return success(res, 200, posts, "retrieved all posts")
     } catch (error) {
         return sendError(res,500,null,error.message)
