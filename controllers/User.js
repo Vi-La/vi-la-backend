@@ -9,6 +9,7 @@ const { success, fail, sendError, generateToken } = require('../function/respond
 
 // ===========START: CREATE USER===============
 const createUser = async (req, res) => {
+    let isAdmin = true
     try {
         const passwordNew = generator.generate({
             length: 11,
@@ -16,12 +17,18 @@ const createUser = async (req, res) => {
         });
         const hashedPassword = hashPassword(passwordNew)
 
+        if(req.body.userType == "isUser"){
+            isAdmin = false
+        }
+
         const newUser = new User({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
             telephone: req.body.telephone,
-            password: hashedPassword
+            password: hashedPassword,
+            userType: req.body.userType,
+            isAdmin: isAdmin,
         });
         // EMAIL_PASSWORD= udtjhtwylpjdlrma
         const URL = `https://www.rcc_rwanda.com/`;
@@ -120,6 +127,7 @@ const userLogin = async (req, res) => {
 
         const user = await User.findOne({ email }).select("+password")
 
+
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({
                 status: "fail",
@@ -134,8 +142,9 @@ const userLogin = async (req, res) => {
             lastName: user.lastName,
             email: user.email,
             telephone: user.telephone,
+            userType: user.userType
         }
-        res.status(200).json({ status: 'success', data, accessToken, message: 'loged in successful' });
+        res.status(200).json({ status: 'success', data, accessToken, message: 'logged in successful' });
 
     } catch (error) {
         // console.error(error)
