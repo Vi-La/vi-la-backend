@@ -3,7 +3,7 @@ const { createPost, getPosts, getPost, deletedPost, updatedPost } = require('../
 const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 
 //====Start:: Create Post=============//
-router.post("/create", verifyTokenAndAdmin, createPost);
+router.post("/create",  createPost);
 //====End:: Create Post============//
 
 //====Start:: Get Post============//
@@ -15,11 +15,11 @@ router.get("/:postId", getPost);
 //====End:: Get Post============//
 
 //====Start:: Delete Post============//
-router.delete("/:postId", verifyTokenAndAdmin, deletedPost);
+router.delete("/:postId",  deletedPost);
 //====End:: Delete Post============//
 
 //====Start:: Update post============//
-router.put("/:postId", verifyTokenAndAdmin, updatedPost);
+router.put("/:postId",  updatedPost);
 //====End:: Update post============//
 
 module.exports = router

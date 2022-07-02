@@ -11,15 +11,15 @@ router.get("/", getTestimonials);
 //====End:: Get Testimonials============//
 
 //====Start:: Get Testimonial============//
-router.get("/:postId",verifyToken, verifyTokenAndAdmin, getTestimonial);
+router.get("/:postId", getTestimonial);
 //====End:: Get Testimonial============//
 
 //====Start:: Delete Testimonial============//
-router.delete("/:postId", verifyTokenAndAdmin, deletedTestimonial);
+router.delete("/:postId",  deletedTestimonial);
 //====End:: Delete Testimonial============//
 
 //====Start:: Update Testimonial============//
-router.put("/:postId",verifyTokenAndAdmin, updatedTestimonial);
+router.put("/:postId", updatedTestimonial);
 //====End:: Update Testimonial============//
 
 

@@ -3,7 +3,7 @@ const { createSainter, getSainters, getSainter, deleteSainter, updatedSainter } 
 const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 
 //====Start:: Create Sainter=============//
-router.post("/create", verifyTokenAndAdmin, createSainter);
+router.post("/create",  createSainter);
 //====End:: Create Sainter============//
 
 //====Start:: Get Sainters============//
@@ -11,15 +11,15 @@ router.get("/", getSainters);
 //====End:: Get Sainters============//
 
 //====Start:: Get Sainter============//
-router.get("/:postId", verifyTokenAndAdmin, getSainter);
+router.get("/:postId",  getSainter);
 //====End:: Get Sainter============//
 
 //====Start:: Delete Sainter============//
-router.delete("/:postId", verifyTokenAndAdmin, deleteSainter);
+router.delete("/:postId",  deleteSainter);
 //====End:: Delete Sainter============//
 
 //====Start:: Update Sainter============//
-router.put("/:postId", verifyTokenAndAdmin, updatedSainter);
+router.put("/:postId",  updatedSainter);
 //====End:: Update Sainter============//
 
 

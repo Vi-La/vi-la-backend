@@ -13,15 +13,15 @@ router.get("/", getUsers);
 //====End:: Get Users============//
 
 //====Start:: Get User============//
-router.get("/:userId", verifyTokenAndAdmin, getUser);
+router.get("/:userId",  getUser);
 //====End:: Get User============//
 
 //====Start:: Delete User============//
-router.delete("/:userId", verifyTokenAndAdmin, deletedUser);
+router.delete("/:userId",  deletedUser);
 //====End:: Delete User============//
 
 //====Start:: Update User============//
-router.put("/:userId", verifyTokenAndAdmin, updatedUser);
+router.put("/:userId",  updatedUser);
 //====End:: Update User============//
 
 //====Start:: Login============//
