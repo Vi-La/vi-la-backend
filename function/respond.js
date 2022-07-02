@@ -10,4 +10,10 @@ const fail = (res , code , data , message) => {
     res.status(code).json({"status":"Fail", data , message});
 }
 
-module.exports = { sendError , success , fail }
+
+const generateToken = (isAdmin)=>{
+    return jwt.sign({isAdmin},process.env.JWT_SECRETE,{
+        expiresIn:process.env.JWT_EXPIRES_IN
+    })
+}
+module.exports = { sendError , success , fail,generateToken }

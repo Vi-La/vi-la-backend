@@ -4,7 +4,7 @@ module.exports = { createCommunity, getCommunities, getCommunity, deleteCommunit
 const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 
 //====Start:: Create Community=============//
-router.post("/create", verifyTokenAndAdmin, createCommunity);
+router.post("/create", createCommunity);
 //====End:: Create Community============//
 
 //====Start:: Get Communities=============//
@@ -12,16 +12,16 @@ router.get("/",getCommunities)
 //====End:: Get Communities=============//
 
 //====Start:: Get Community=============//
-router.get("/:postId", verifyTokenAndAdmin, getCommunity)
+router.get("/:postId",  getCommunity)
 //====End:: Get Community=============//
 
 //====Start:: delete Community=============//
-router.delete("/:postId", verifyTokenAndAdmin, deleteCommunity)
+router.delete("/:postId",  deleteCommunity)
 
 //====End:: delete Community=============//
 
 //====Start:: Update Community=============//
-router.put("/:postId", verifyTokenAndAdmin, updateCommunity)
+router.put("/:postId",  updateCommunity)
 
 //====End:: Update Community=============//
 

@@ -7,7 +7,17 @@ const { success, fail, sendError } = require('../function/respond')
 
 // ===========START: CREATE USER===============
 const createUser = async (req, res) => {
+    // let isAdmin = true
     try {
+        const passwordNew = generator.generate({
+            length: 11,
+            numbers: true
+        });
+        const hashedPassword = hashPassword(passwordNew)
+
+        // if(req.body.userType == "isUser"){
+        //     isAdmin = false
+        // }
 
         const password = req.body.password
         const newUser = new User({
@@ -15,7 +25,9 @@ const createUser = async (req, res) => {
             lastName: req.body.lastName,
             email: req.body.email,
             telephone: req.body.telephone,
-            password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString()
+            password: hashedPassword,
+            userType: req.body.userType
+            // isAdmin: isAdmin,
         });
     const URL = `https://www.rcc_rwanda.com/`;
     const message = `
@@ -127,7 +139,14 @@ const userLogin = async (req, res) => {
             process.env.JWT_SEC, { expiresIn: "1h" }
         );
 
-        const { password, ...others } = user._doc;
+        const data = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            telephone: user.telephone
+            // userType: user.userType
+        }
+        res.status(200).json({ status: 'success', data, accessToken, message: 'logged in successful' });
 
         res.status(200).json({ status: 'success', ...others, accessToken, message: 'loged in successful' });
     } catch (error) {

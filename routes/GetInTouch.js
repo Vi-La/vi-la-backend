@@ -3,7 +3,7 @@ const { createContactUs, getMembers, getMember, deleteMember, updateMember } = r
 const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 
 //====Start:: Create Community member=============//
-router.post("/create", verifyTokenAndAdmin, createContactUs);
+router.post("/create",  createContactUs);
 //====End:: Create Community member============//
 
 //====Start:: Get Community members=============//
@@ -11,16 +11,16 @@ router.get("/",getMembers)
 //====End:: Get Community members=============//
 
 //====Start:: Get Community member=============//
-router.get("/:postId", verifyTokenAndAdmin, getMember)
+router.get("/:postId",  getMember)
 //====End:: Get Community member=============//
 
 //====Start:: delete Community member=============//
-router.delete("/:postId", verifyTokenAndAdmin, deleteMember)
+router.delete("/:postId",  deleteMember)
 
 //====End:: delete Community member=============//
 
 //====Start:: Update Community member=============//
-router.put("/:postId", verifyTokenAndAdmin, updateMember)
+router.put("/:postId",  updateMember)
 
 //====End:: Update Community member=============//
 
