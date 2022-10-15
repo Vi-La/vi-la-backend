@@ -4,14 +4,13 @@ const nodemailer = require('nodemailer')
 const Message = require("../models/Message");
 const { success, fail, sendError } = require('../function/respond')
 
-
-// ===========Start:: create a new Message===============
-const createMessage = async (req, res) => {
-    const { fullName, phone, address, email, message } = req.body;
+const sendMessage = async (req, res) => {
+    const { fullName, phone, country, email, diosece, message } = req.body;
     const newMessage = new Message({
         fullName,
         phone,
-        address,
+        country,
+        diosece,
         email,
         message
     });
@@ -22,43 +21,37 @@ const createMessage = async (req, res) => {
         return sendError(res,500,null,error.message)
     }
 }
-// ===========End: create a new Message===============
 
-// ===========Start: Get Messages===============
 const getMessages = async (req, res) => {
     try {
-        const messages = await Message.find();
+        const messages = await Message.find().sort("-createdAt");
         return success(res, 200, messages, "retrieved all Messages")
     } catch (error) {
         return sendError(res,500,null,error.message)
     }
 }
-// ===========End:: Get Messages===============
 
-// ===========Start:: Get Message===============
 const getMessage = async (req, res) => {
-    const msgId = req.params.postId;
+    const id = req.params.id;
     try {
-        const message = await Message.findById(msgId)
-        if (!msgId) return fail(res, 400, null, "Wrong Id");
+        const message = await Message.findById(id)
+        if (!message) return fail(res, 400, null, "Wrong Id");
         return success(res, 200, message, "retrieved post")
     } catch (error) {
         return sendError(res,500,null,error.message)
     }
 }
-// ===========End:: Get Message===============
 
-// ===========Start:: Delete Message===============
 const deletedMessage = async (req, res) => {
-    const msgId = req.params.postId;
+    const id = req.params.id;
     try {
-        const message = await Message.findByIdAndDelete(msgId)
+        const message = await Message.findByIdAndDelete(id)
         if (!message) return fail(res, 400, null, "Message doesn't exist")
         return success(res, 200, null, "Message deleted successful")
     } catch (error) {
         return sendError(res,500,null,error.message)
     }
 }
-// ===========End:: Delete Message===============
 
-module.exports = { createMessage, getMessages, getMessage, deletedMessage };
+
+module.exports = { sendMessage, getMessages, getMessage, deletedMessage };

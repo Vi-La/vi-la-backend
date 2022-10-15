@@ -5,6 +5,9 @@ const TestimonialSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    title: {
+        type: String
+    },
     message: {
         type: String,
         required: true

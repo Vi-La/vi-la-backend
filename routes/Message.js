@@ -1,21 +1,14 @@
 const router = require("express").Router();
-const { createMessage, getMessages, getMessage, deletedMessage } = require('../controllers/Message')
+const {
+    sendMessage,
+    getMessages,
+    getMessage,
+    deletedMessage
+} = require('../controllers/Message')
+
 const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 
-//====Start:: Create Message=============//
-router.post("/send", createMessage);
-//====End:: Create Message============//
-
-//====Start:: Get Messages============//
-router.get("/",  getMessages);
-//====End:: Get Messages============//
-
-//====Start:: Get Message============//
-router.get("/:postId",  getMessage);
-//====End:: Get Message============//
-
-//====Start:: Delete Message============//
-router.delete("/:postId",  deletedMessage);
-//====End:: Delete Message============//
+router.route("/").post(sendMessage).get(getMessages)
+router.route("/:id").get(getMessage).delete(deletedMessage)
 
 module.exports = router

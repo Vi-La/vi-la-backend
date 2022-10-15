@@ -1,31 +1,21 @@
 const router = require("express").Router();
 
-const { createUser, getUsers, getUser, deletedUser, updatedUser, userLogin } = require('../controllers/User')
+const {
+    createUser,
+    getUsers,
+    getUser,
+    deletedUser,
+    updatedUser,
+    changeUserPass,
+    userLogin
+} = require('../controllers/User')
+
 const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 
 
-//====Start:: Create User============//
-router.post("/create", verifyTokenAndAdmin, createUser);
-//====End:: Create User============//
-
-//====Start:: Get Users============//
-router.get("/", getUsers);
-//====End:: Get Users============//
-
-//====Start:: Get User============//
-router.get("/:userId",  getUser);
-//====End:: Get User============//
-
-//====Start:: Delete User============//
-router.delete("/:userId",  deletedUser);
-//====End:: Delete User============//
-
-//====Start:: Update User============//
-router.put("/:userId",  updatedUser);
-//====End:: Update User============//
-
-//====Start:: Login============//
-router.post("/login", userLogin)
-//====End:: Login============//
+router.post("/login", userLogin);
+router.put("/change/password/:id", changeUserPass);
+router.route("/").post(createUser).get(getUsers)
+router.route("/:id").get(getUser).delete(deletedUser).put(updatedUser)
 
 module.exports = router

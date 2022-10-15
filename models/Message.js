@@ -4,20 +4,23 @@ const validator = require('validator')
 const MessageSchema = new mongoose.Schema({
     fullName: {
         type: String,
-        required: true
+        required: [true, "Names are required"]
     },
     phone: {
         type: Number,
-        required: true,
-        min:10
+        required: [true, "Telephone Number is required"]
     },
-    address: {
+    country: {
         type: String,
-        required: true
+        required: [true, "Country is required"]
+    },
+    diosece: {
+        type: String,
+        required: [true, "Diocese is required"]
     },
     email: {
         type: String,
-        required: true,
+        required: [true, "Email is required"],
         validate(value){
             if(!validator.isEmail(value))
             throw new Error('Invalid Email')
@@ -25,7 +28,7 @@ const MessageSchema = new mongoose.Schema({
     },
     message: {
         type: String,
-        required: true
+        required: [true, "Message is required"]
     }
 },
     { timestamps: true });
