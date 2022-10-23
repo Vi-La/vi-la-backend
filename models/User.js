@@ -1,40 +1,39 @@
 const mongoose = require("mongoose");
-const validator = require('validator')
+const validator = require('validator');
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        required: true
+        required: [true, "First Name is required"]
     },
-    lastName: {
+    telephone: {
+        type: Number,
+        required: [true, "Telephone is required"]
+    },
+    diocese: {
         type: String,
-        required: true
+        required: [true, "Diocese is required"]
     },
     email: {
         type: String,
         unique: true,
-        required: true,
-        validate(value){
-            if(!validator.isEmail(value))
-            throw new Error('Invalid Email')
+        required: [true, "Email is required"],
+        validate(value) {
+            if (!validator.isEmail(value))
+                throw new Error('Invalid Email')
         }
     },
-    telephone: {
-        type: Number,
-        required: true
-    },
-    password: {
+    lastName: String,
+    country: String,
+    password: String,
+    confirmPassword: String,
+    profileImage: String,
+    userType: {
         type: String,
-        required: true,
-        minlength: 4
+        enum: ["User", "Belige", "Admin"],
+        default: "User",
     },
-    confirmPass: {
-        type: String
-    },
-    isAdmin: {
-        type: Boolean,
-        default: false
-    }
 },
     { timestamps: true });
 

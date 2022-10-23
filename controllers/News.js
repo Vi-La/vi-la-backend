@@ -2,89 +2,70 @@ const express = require('express')
 const News = require("../models/News");
 const { success, fail, sendError } = require('../function/respond')
 
-// ===========Start:: create a new post===============
 const createPost = async (req, res) => {
-    const avata = 'https://cdn.pixabay.com/photo/2012/04/25/00/03/dove-41260__480.png';
-    const { title, subTitle, desc } = req.body;
+    const { title, description, image } = req.body;
     const newPost = new News({
         title,
-        subTitle,
-        desc,
-        newsImage: avata
+        description,
+        image
     });
     try {
+        const findNews = await News.findOne({ title: title });
+        if (findNews) return sendError(res, 409, "Title already exist!", null);
+
         const newsSaved = await newPost.save();
         return success(res, 201, newsSaved, "News have been created")
     } catch (error) {
         return sendError(res,500,null,error.message)
     }
 }
-// ===========End: create a new post===============
 
-// ===========Start: Get Posts===============
 const getPosts = async (req, res) => {
     try {
-        const posts = await News.find();
+        const posts = await News.find().sort("-createdAt");
         return success(res, 200, posts, "retrieved all posts")
     } catch (error) {
         return sendError(res,500,null,error.message)
     }
 }
-// ===========End:: Get Posts===============
 
-// ===========Start:: Get Post===============
 const getPost = async (req, res) => {
-    const postId = req.params.postId;
+    const id = req.params.id;
     try {
-        const post = await News.findById(postId)
-        if (!postId) return fail(res, 400, null, "Wrong Id");
+        const post = await News.findById(id)
+        if (!post) return fail(res, 400, null, "Wrong Id");
         return success(res, 200, post, "retrieved post")
     } catch (error) {
         return sendError(res,500,null,error.message)
     }
 }
-// ===========End:: Get Post===============
 
-// ===========Start:: Delete Post===============
 const deletedPost = async (req, res) => {
-    const postId = req.params.postId;
+    const id = req.params.id;
     try {
-        const post = await News.findByIdAndDelete(postId)
+        const post = await News.findByIdAndDelete(id)
         if (!post) return fail(res, 400, null, "Post doesn't exist")
         return success(res, 200, null, "Post deleted successful")
     } catch (error) {
         return sendError(res,500,null,error.message)
     }
 }
-// ===========End:: Delete Post===============
 
-// ===========Start:: Update Post===============
 const updatedPost = async (req, res) => {
     try {
-        var postId = req.params.postId;
-        let bodyData = req.body;
-        let data = await News.findOneAndUpdate(
-            { _id: postId },
-            { $set: bodyData });
-        const findeUpdatePost = await News.findOne({ _id: postId });
-        if (findeUpdatePost) {
-            message = `Post updated successful`;
-            success(res, 200, findeUpdatePost, message);
-            return;
+        var id = req.params.id;
+        const updatedNews = await News.findByIdAndUpdate({ _id: id }, req.body, {
+            new: true,
+        })
+        if (updatedNews) {
+            return success(res, 201, "Post updated successful", updatedNews)
         }
         else {
-            message = `We don't have Post with this id ${postId}`;
-            fail(res, 404, null, message);
-            return;
+            return fail(res, 404, `We don't have Post with this id ${id}`, null)
         }
-    }
-    catch (error) {
-        return sendError(res,500,null,error.message)
+    } catch (error) {
+        res.status(200).json({ status: 'fail', message: error });
     }
 }
-
-// ===========End:: Update Post===============
-
-
 
 module.exports = { createPost, getPosts, getPost, deletedPost, updatedPost };

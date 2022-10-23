@@ -3,18 +3,20 @@ const mongoose = require("mongoose");
 const ContactUsSchema = new mongoose.Schema({
     fullName: {
         type: String,
-        required: true
+        required: [true, "Full names are required"]
     },
-    title: {
+    email: {
         type: String,
-        required: true
+        unique: true,
+        required: [true, "Email is required"]
     },
     image: {
-        type: String
+        type: String,
+        required: [true, "Image is required"]
     },
     diocese: {
         type: String,
-        unique: true
+        required: [true, "Diocese is required"]
     },
     fbLink: {
         type: String

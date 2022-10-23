@@ -1,25 +1,13 @@
 const router = require("express").Router();
-const { createPost, getPosts, getPost, deletedPost, updatedPost } = require('../controllers/News')
+const {
+    createPost,
+    getPosts,
+    getPost,
+    deletedPost,
+    updatedPost } = require('../controllers/News')
 const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 
-//====Start:: Create Post=============//
-router.post("/create",  createPost);
-//====End:: Create Post============//
-
-//====Start:: Get Post============//
-router.get("/", getPosts);
-//====End:: Get Posts============//
-
-//====Start:: Get Post============//
-router.get("/:postId", getPost);
-//====End:: Get Post============//
-
-//====Start:: Delete Post============//
-router.delete("/:postId",  deletedPost);
-//====End:: Delete Post============//
-
-//====Start:: Update post============//
-router.put("/:postId",  updatedPost);
-//====End:: Update post============//
+router.route("/").post(createPost).get(getPosts)
+router.route("/:id").get(getPost).delete(deletedPost).put(updatedPost)
 
 module.exports = router

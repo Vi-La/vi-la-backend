@@ -1,5 +1,11 @@
 const router = require("express").Router();
-module.exports = { createHistory, getHistories, getHistory, deleteHistory, updateHistory } = require('../controllers/History')
+const {
+    createHistory,
+    getHistories,
+    getHistory,
+    deleteHistory,
+    updateHistory
+} = require('../controllers/History')
 
 const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken')
 

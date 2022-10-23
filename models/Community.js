@@ -1,24 +1,19 @@
 const mongoose = require("mongoose");
 
 const CommunityMemberSchema = new mongoose.Schema({
-    title: {
+    name: {
         type: String,
-        required: true
+        unique: true,
+        required: [true, "Community name is required"]
     },
-    member: {
+    diocese: {
         type: String,
-        required: true
+        required: [true, "Diocese is required"]
     },
-    action: {
-        type: String,
-        required: true
-    },
-    image: {
-        type: String
-    },
-    twLink: {
-        type: String
-    }
+    member: String,
+    image: String,
+    fbLink: String,
+    twLink: String
 },
     { timestamps: true });
 
